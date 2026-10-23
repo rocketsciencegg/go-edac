@@ -17,9 +17,7 @@ go get -u github.com/multiplay/go-edac
 Requirements
 ------------
 
-CI retains Go 1.19 coverage and also tests, vets, and builds with the latest
-stable Go release (`stable` with `check-latest`), verified as Go 1.27.3 on
-2026-10-23. Release automation also uses the latest stable toolchain.
+CI tests and lints with Go 1.27 (Go 1.27.3 when verified on 2026-10-23).
 The module's `go 1.12` directive is unchanged.
 
 In order for EDAC information to be available your system needs the required kernel modules
