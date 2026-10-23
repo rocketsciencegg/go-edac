@@ -17,7 +17,7 @@ jobs:
         go: ['1.27']
         golangci: ['v2.15.0']
         os: [ubuntu-latest]
-    name: test and lint (Go ${{ matrix.go }})
+    name: lint
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -35,18 +35,10 @@ jobs:
           go mod tidy
           git --no-pager diff && [[ 0 -eq $(git status --porcelain | wc -l) ]]
 
-      - name: Go Test
-        run: GOMAXPROCS=2 go test -p 2 -race -v ./...
-
       - name: Go Lint
         uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
           version: ${{ matrix.golangci }}
-        env:
-          GOMAXPROCS: '2'
 
-      - name: Go Vet
-        run: GOMAXPROCS=2 go vet -p 2 ./...
-
-      - name: Go Build
-        run: GOMAXPROCS=2 go build -p 2 ./...
+      - name: Go Test
+        run: go test -race -v ./...
