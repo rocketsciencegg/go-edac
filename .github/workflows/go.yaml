@@ -14,17 +14,16 @@ jobs:
   go:
     strategy:
       matrix:
-        go: [1.19]
-        golangcli: [v1.50.1]
+        go: ['1.19']
         os: [ubuntu-latest]
-    name: lint
+    name: test (Go ${{ matrix.go }})
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: ${{ matrix.go }}
           cache: true
@@ -35,13 +34,24 @@ jobs:
           go mod tidy
           git --no-pager diff && [[ 0 -eq $(git status --porcelain | wc -l) ]]
 
-      - name: Go Lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: ${{ matrix.golangci }}
-          args: "--out-${NO_FUTURE}format colored-line-number"
-          skip-pkg-cache: true
-          skip-build-cache: true
-
       - name: Go Test
-        run: go test -race -v ./...
+        run: GOMAXPROCS=2 go test -p 2 -race -v ./...
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          # golangci-lint v2 requires a newer toolchain than the minimum test lane.
+          go-version: '1.27.3'
+          cache: true
+      - name: Go Lint
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.15.0
+        env:
+          GOMAXPROCS: '2'

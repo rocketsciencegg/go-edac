@@ -17,6 +17,13 @@ go get -u github.com/multiplay/go-edac
 Requirements
 ------------
 
+CI actions are pinned to verified release commit SHAs, with release versions
+recorded alongside each pin. Linting uses golangci-lint v2.15.0 with Go 1.27.3
+separately from the Go 1.19 test lane. The v2 lint configuration preserves the
+previous standard error-handling exclusions and skips Go 1.27 inlining
+suggestions that would raise the library's minimum Go version. Release
+automation uses GoReleaser v2.19.0 with the v2 configuration format.
+
 In order for EDAC information to be available your system needs the required kernel modules
 installed and loaded.
 

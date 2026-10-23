@@ -1,0 +1,11 @@
+version: "2"
+linters:
+  settings:
+    govet:
+      disable:
+        # Inlining Go 1.27 stdlib wrappers would raise the library's Go minimum.
+        - inline
+  exclusions:
+    presets:
+      # Preserve the v1 default exclusions for deferred Close errors.
+      - std-error-handling

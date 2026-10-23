@@ -1,4 +1,5 @@
 # When adding options check the documentation at https://goreleaser.com
+version: 2
 builds:
   - skip: true
 release:
